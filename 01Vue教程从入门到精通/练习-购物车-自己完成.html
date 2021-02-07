@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .active {
+            color: red;
+            font-size: 50px;
+        }
+        table{
+            border-collapse:collapse;
+            border-spacing: 0;
+        }
+        table tr td{
+            border: 1px solid gainsboro;                       
+        }
+        td
+        {
+            text-align:left;
+            padding: 10px 20px;
+        }
+        .change{
+            background-color: aliceblue;
+            border: 1px solid gainsboro;
+            border-radius: 25%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <table>
+            <tr style="background-color:rgb(246, 246, 246);">
+                <td v-for='item in firstLine'>{{item}}</td>
+            </tr>
+            <tr v-if="this.books.length===0">
+                <td colspan=6>购物车为空</td>
+            </tr>
+            <tr v-for='(book,index1) in books'>
+                <td v-for="(value,key) in book">
+                    <span v-if="key=='price'">¥{{value.toFixed(2)}}</span>
+                    <span v-else-if="key=='amount'">
+                        <button class="change" @click='sub(index1)'>-</button>
+                        {{value}}
+                        <button class="change" @click='add(index1)'>+</button>
+                    </span>
+                    <span v-else>{{value}}</span>
+                    </td>
+                <td><button @click='del(index1)'>移除</button></td>
+            </tr>
+        </table>
+        <h2>总价:¥{{total.toFixed(2)}}</h2>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                firstLine:{id:"",bookName:'书籍名称',publicDate:"出版日期",price:"价格",amount:"购买数量",work:'操作'},
+                books:[
+                    {id:1,bookName:'《算法导论》',publicDate:"2006-9",price:85.00,amount:0},
+                    {id:2,bookName:'《UNIX编程艺术》',publicDate:"2006-2",price:59.00,amount:0},
+                    {id:3,bookName:'《编程珠玑》',publicDate:"2008-10",price:39.00,amount:0},
+                    {id:4,bookName:'《代码大全》',publicDate:"2006-3",price:128.00,amount:0},], 
+                prices:[],
+            },
+            computed:{
+                total(){
+                    let result = 0;
+                    for (let book of this.books) {
+                        result += book.amount*book.price
+                        console.log(book.price, book.amount, book.amount*book.price)  
+                    }                   
+                    console.log('total')
+                    return result
+                },               
+            },
+            methods:{   
+                add(index1){
+                    this.books[index1].amount += 1
+                    console.log('+++++++++',this.books[index1].amount) 
+                },
+                sub(index1){
+                    if(this.books[index1].amount >0){
+                        this.books[index1].amount -= 1
+                        console.log('----------',this.books[index1].amount)
+                    }
+                },
+                del(index1){
+                    this.books.splice(index1,1)
+                    console.log('del', index1,this.books.length)
+                },                           
+            }
+        })
+
+    </script>
+</body>
+
+</html>

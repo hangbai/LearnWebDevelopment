@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>    
+</head>
+<body>
+    
+    <div id="app">
+        <div>
+            <h1>点击为：{{total}}</h1>
+            <cpn :temp='total' @tempnumber='getnumber'></cpn>
+        </div>       
+    </div>
+
+    <template id="cpnt">
+        <div>
+            <button @click='sub'>-</button>
+            <button @click='add'>+</button>
+        </div>
+
+    </template>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 子组件
+        const cpn = {
+            template:'#cpnt',
+            data(){
+                // return {total:0}
+                return {count : this.temp} //避免子组件改变props的属性值
+            },
+            props:{
+                temp:{
+                    type:Number,
+                    default:0,
+                }
+            },
+            methods:{
+                add(){
+                    this.count++;
+                    console.log('add',this.count);
+                    this.$emit('tempnumber',this.count);
+                    console.log('emit',this.count);
+                },
+                sub(){
+                    this.count--
+                    console.log('sub',this.count);
+                    this.$emit('tempnumber',this.count);
+                    console.log('emit',this.count);
+                },
+                outnumber(){
+                    this.$emit('tempnumber',this.count)
+                }
+            }
+        }        
+        // 全剧组件
+        // Vue.component('cpn',{
+        //     template:'#cpnt'
+        // })
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                total:0,                      
+            }, 
+            computed:{
+                
+            },
+            methods:{
+                getnumber(item){
+                    console.log('getnumber',item);
+                    this.total = item
+                }
+            },
+            components:{
+                cpn,
+            },
+            
+        })
+
+    </script>
+</body>
+
+</html>
