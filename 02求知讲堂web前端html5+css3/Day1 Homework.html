@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>    
+</head>
+<body>
+    
+    <div id="app">
+        <span v-if='qiehuan'>
+            <label for="usename">用户账号</label>
+            <input type="text" id="usename" key="usename" placeholder="用户账号">
+        </span>
+        <span v-else>
+            <label for="email">邮箱地址</label>
+            <input type="text" id="email" key="email" placeholder="邮箱地址">
+        </span>        
+        <button @click='isChange'>切换类型</button>          
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                qiehuan:true,                   
+            },
+            
+            computed:{
+                abc(){
+                   let result = 0;
+                   return result
+                }
+            },
+            methods:{
+                isChange(){
+                    this.qiehuan = !this.qiehuan
+                }
+            }    
+            
+        })
+
+    </script>
+</body>
+
+</html>

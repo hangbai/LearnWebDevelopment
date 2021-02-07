@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		table{
+        border-collapse: collapse;
+				width: 600px;
+				text-align: center;
+				margin-bottom: 5px;
+		}
+
+    td{
+        border: 1px solid black;
+    }
+
+    th{
+        border: 1px solid black;
+        background-color: dodgerblue;
+		    height: 30px;
+    }
+
+		img{
+				height: 80px;
+				padding: 3px 0px;
+		}
+
+		tr:last-child td{
+				height: 40px;
+        background-color: #fff;
+		}
+
+    tr:last-child td input{
+				margin-left: 25px;
+		}
+
+    tr:nth-child(2n){
+        background-color: lightgray;
+    }
+    .big-img{
+		    position: absolute;
+		    top:50px;
+		    left: 200px;
+		    height: 350px;
+    }
+    .big-img img{
+		    height: 100%;
+    }
+	</style>
+</head>
+<body>
+<div>
+	<table>
+		<tr>
+			<th>选项</th>
+			<th>编号</th>
+			<th>封面</th>
+			<th>购书人</th>
+			<th>性别</th>
+			<th>购书价</th>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>1001</td>
+			<td><img src="img/book01.jpg" alt=""></td>
+			<td>张三</td>
+			<td>男</td>
+			<td>31.60元</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>1002</td>
+			<td><img src="img/book02.jpg" alt=""></td>
+			<td>张三</td>
+			<td>男</td>
+			<td>31.60元</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>1003</td>
+			<td><img src="img/book03.jpg" alt=""></td>
+			<td>张三</td>
+			<td>男</td>
+			<td>31.60元</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>1004</td>
+			<td><img src="img/book04.jpg" alt=""></td>
+			<td>张三</td>
+			<td>男</td>
+			<td>31.60元</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox"></td>
+			<td>1005</td>
+			<td><img src="img/book05.jpg" alt=""></td>
+			<td>张三</td>
+			<td>男</td>
+			<td>31.60元</td>
+		</tr>
+		<tr>
+			<td colspan="6" align="left">
+				<input type="checkbox" name="all">全选
+				<input type="button" value="删除">
+			</td>
+		</tr>
+	</table>
+
+</div>
+</body>
+<!--<script crossOrigin="anonymous" integrity="sha512-WNLxfP/8cVYL9sj8Jnp6et0BkubLP31jhTG9vhL/F5uEZmg5wEzKoXp1kJslzPQWwPT1eyMiSxlKCgzHLOTOTQ==" src="https://lib.baomitu.com/jquery/3.5.1/jquery.js"></script>-->
+<script src="jquery-3.5.1.js"></script>
+<script>
+  let img = $('img')
+  let bigImg = $("<div><img></div>").attr('class','big-img')
+	$(img).mouseover(function (){
+	  let imgUrl = $(this).attr('src')
+    console.log('onmouseover',imgUrl,)
+    $('body').append(bigImg)
+    $('.big-img>img').attr('src',imgUrl)
+		$('img').mousemove(function (e){
+      // console.log(e.pageX ,e.pageY)
+			let x = e.pageX+20
+			let y = e.pageY+20
+      $('.big-img').css({'top':y,'left': x})
+		})
+	})
+  $(img).mouseout(function(){
+    console.log('mouseout')
+		$('.big-img').remove()
+  });
+
+  let selectAll = $('input[name=all]')
+  let items = $('input:not(input[name=all],input[type=button])')
+
+  selectAll.click(function (){
+    console.log('全选')
+    $('input:not(input[name=all],input[type=button])').prop("checked", this.checked)
+  })
+
+  items.click(function (){
+    console.log('单选',$(this).prop("checked"))
+  })
+
+  $('input[type=button]').click(function (){
+    for(let i=0;i<items.length;i++){
+      // console.log($(items[i]).prop("checked"))
+	    let row = 'tr+tr:eq('+i+')'
+	    if($(items[i]).prop("checked")) {
+        console.log(i,$(items[i]))
+        $(row).css('display','none')
+        $(row).animate()
+      }
+    }
+    console.log('删除')
+
+  })
+
+</script>
+</html>

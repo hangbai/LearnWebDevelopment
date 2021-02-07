@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+      table td {
+          border: 1px solid black;
+          text-align: center;
+      }
+      table {
+          border-collapse: collapse;
+          width: 600px;
+          height: 400px;
+      }
+      th{
+          background-color: dodgerblue;
+          border: 1px solid black;
+          color: white;
+      }
+      tr:nth-child(2n+1){
+          background-color: darkgrey;
+      }
+      tr:nth-child(2n){
+          background-color: gainsboro;
+      }
+      /*tr:hover{*/
+      /*    background-color:yellow;*/
+      /*}*/
+	</style>
+</head>
+<body>
+<table>
+	<tr>
+		<th>序号</th>
+		<th>姓名</th>
+		<th>课程</th>
+		<th>成绩</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>张三</td>
+		<td>英语</td>
+		<td>100</td>
+	</tr>
+
+</table>
+</body>
+<script>
+  let a = document.getElementsByTagName('tr')
+  console.log(a)
+  for (let i=0; i < a.length;i++){
+    a[i].onmouseover = function (){
+      this.style.backgroundColor='yellow'
+    }
+    a[i].onmouseleave = function (){
+      this.style.backgroundColor=''
+    }
+  }
+</script>
+</html>

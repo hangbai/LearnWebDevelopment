@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		body{
+				max-width: 800px;
+				border: 1px solid black;
+		}
+		div{
+				display: flex;
+				width: 100%;
+		}
+		div img{
+        width: 100%;
+        padding-left: 2%;
+        overflow: hidden;
+		}
+    div img:last-child{
+        padding-right: 2%;
+    }
+		.big{
+				width: 96%;
+				padding: 2%;
+		}
+		h1{
+				text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>相册</h1>
+	<div>
+		<img src="img/img01.jpg" alt="">
+		<img src="img/img02.jpg" alt="">
+		<img src="img/img03.jpg" alt="">
+		<img src="img/img04.jpg" alt="">
+	</div>
+	<img class="big" src="img/img01.jpg" alt="">
+</body>
+<script>
+let a = document.getElementsByTagName('div')[0].getElementsByTagName('img')
+let b = document.getElementsByClassName('big')[0]
+console.log(a)
+console.log(b)
+for(let i=0;i<a.length;i++){
+  a[i].onclick = function (){
+    let c = a[i].getAttribute('src')
+    console.log(c)
+	  b.setAttribute('src',c)
+  }
+}
+</script>
+</html>

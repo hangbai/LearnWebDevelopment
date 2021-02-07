@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    width: 500px;
+    border: 1px solid black;
+}
+
+ul{
+    display: flex;
+    background-color: #1590cd;
+    list-style: none;
+}
+
+li{
+    flex: 1;
+    padding: 10px 15px;
+
+    text-align: center;
+}
+
+a{
+    color: #f7f7f7;
+    text-decoration:none;
+}
+
+a:hover{
+    color: rebeccapurple;
+}

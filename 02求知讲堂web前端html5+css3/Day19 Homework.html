@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+			*{
+					margin: 0;
+					padding: 0;
+			}
+      .item {
+          background-color: #e2e2e2;
+          width: 300px;
+          /*padding: 8px;*/
+		      padding-top: 1000px;
+		      height: 2000px;
+		      margin: 50px auto;
+
+      }
+			.item input[type="button"]{
+					float: right;
+			}
+			.item span{
+					padding-left: 5px;
+			}
+
+			.confirm{
+					position: absolute;
+					background-color: black;
+					left: 0px;
+					top:0px;
+					width: 100%;
+					display: none;
+			}
+
+			.confirm>div{
+					position: absolute;
+					border: 6px solid #979797;
+					background-color: white;
+					width: 400px;
+					margin-left: auto;
+					margin-right: auto;
+			}
+
+			.title{
+          background-color: orange;
+          height: 30px;
+					padding: 5px 15px;
+					line-height: 30px;
+					color: white;
+			}
+			.title img{
+					float: right;
+					height: 30px;
+			}
+			.title+div{
+					height: 100px;
+					display: flex;
+					padding: 30px 0px 0px 30px;
+			}
+      .title+div img{
+					height: 40px;
+		      margin-right: 10px;
+			}
+      .title+div span{
+					line-height: 40px;
+          font-size: 14px;
+      }
+      .title+div+div{
+		      background-color: #EAEAEA;
+		      height: 50px;
+          text-align: right;
+
+      }
+      .confirm input{
+		      width: 50px;
+		      margin-top: 15px;
+		      margin-right: 20px;
+      }
+
+	</style>
+</head>
+<body>
+<div class="item">
+	<input type="checkbox"><span>删除此条目</span>
+	<input type="button" value="删除">
+</div>
+<div class="confirm">
+	<div>
+		<div class="title">
+			<span>删除时提示</span><img src="img/19close.png" alt="close">
+		</div>
+		<div>
+			<img src="img/19attention.png" alt=""><span>您真的要删除该条记录吗？</span>
+		</div>
+		<div>
+			<input type="button" value="确定" name="confirm">
+			<input type="button" value="取消" name="cancel">
+		</div>
+	</div>
+</div>
+</body>
+<script src="jquery-3.5.1.js"></script>
+<script>
+	let confirm = $('.confirm')
+
+  function deleteBox(){
+	  // 滚动距离+页面高度一半-盒子高度一般
+    let y = $(window).scrollTop()+$(window).height()/2-110
+	  // 页面宽度一般-盒子宽度一般
+    let x = $(window).width()/2-200
+	  // 设置背景高度
+    confirm.css({height:$(document).outerHeight(true)})
+	  // 设置对话框位置
+    $('.confirm>div').css({marginTop:y,marginLeft:x})
+  }
+
+	$('.item input[type=button]').click(function (){
+    deleteBox()
+    confirm.show()
+	})
+	$('.title img').click(function (){
+    confirm.hide()
+	})
+  $('.confirm input:eq(1)').click(function (){
+    confirm.hide()
+  })
+  $('.confirm input:eq(0)').click(function (){
+    confirm.hide()
+	  if($('input[type=checkbox]')[0].checked) $('.item').remove()
+  })
+	$(window).resize(function (){
+	  // 放缩刷新
+    if(confirm.is(':visible')) deleteBox()
+	})
+	$(window).scroll(function (){
+	  // 滚动刷新
+    if(confirm.is(':visible')) deleteBox()
+	})
+
+</script>
+</html>
