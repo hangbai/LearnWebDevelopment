@@ -249,3 +249,13 @@ async function main() {
 main()
 ```
 
+
+
+## 插件
+
+### supervisor
+
+安装
+```shell
+npm -g install supervisor
+```
