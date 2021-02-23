@@ -13,12 +13,15 @@ render(app, {
   debug: process.env.NODE_ENV !== 'production'
 })
 
-const static = require('koa-static');
-app.use(static('static'))
+// koa-static
+const koaStatic = require('koa-static');
+app.use(koaStatic('static'))
 
+// koa-bodyparser
 const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
 
+// koa-session
 const session = require('koa-session');
 app.keys = ['some secret'];
 const CONFIG = {
@@ -27,54 +30,39 @@ const CONFIG = {
 };
 app.use(session(CONFIG, app));
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/MallData', {useNewUrlParser: true, useUnifiedTopology: true});
-const testSchema = new mongoose.Schema({
-    username: {type: String},
-    password: {type: String},
-  }, {versionKey: false} // 去除"__v":0
-)
-const homeSchema = new mongoose.Schema({
-  data:{type:Object},
-  type:{type:String},
-  page:{type:Number}
+// multer
+const multer = require('@koa/multer')
+let storage = multer.diskStorage({
+  //文件保存路径
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  //修改文件名称
+  filename: function (req, file, cb) {
+    let fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+    cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
+  }
 })
-const TestModel = mongoose.model('Test', testSchema, 'home')
-const multiModel = mongoose.model('Multi',homeSchema,'home')
-const dataModel = mongoose.model('data',homeSchema,'home')
+let upload = multer({storage});
 
-router.get('/', function (ctx, next) {
+
+router.get('/', function (ctx) {
   console.log('首页')
   ctx.body = "首页";
 })
 
 router.get('/add', async (ctx) => {
-  let items = await TestModel.find({}, function (err, docs) {
-
-  });
-  console.log(items)
-  await ctx.render('index', {items})
+  await ctx.render('index')
 })
 
-router.get('/home/multidata',async (ctx)=>{
-  console.log('multidata')
-  let data = await multiModel.findOne({type:'multidata'},{_id:0 })
-  console.log(data)
-  ctx.body = data
-})
+router.post('/upload',upload.single('img'),async ctx => {
+  console.log('ctx.file', ctx.file);
+  ctx.body = 'done';
+});
 
-router.get('/home/data',async (ctx)=>{
-  let dataType = ctx.query.type
-  let dataPage = Number(ctx.query.page)
-  let data = await dataModel.findOne({type:dataType,page:dataPage},{_id:0 })
-  ctx.body = data
-})
-
-router.post('/doAdd', async (ctx, next) => {
-  let data = ctx.request.body
-  ctx.body = data
-  let result = await MyModel.create(data)
-  console.log(result)
+router.post('/multiupload',upload.array('mutilimg',2),async ctx => {
+  console.log('ctx.files', ctx.files);
+  ctx.body = 'done';
 });
 
 app.use(router.routes()) //作用：启动路由
