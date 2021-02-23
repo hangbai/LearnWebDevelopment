@@ -398,3 +398,131 @@ TestModel.findOne({}, (err, docs) => {
   console.log(docs)
 })
 ```
+
+### @koa/multer
+
+https://www.npmjs.com/package/@koa/multer
+
+```shell
+npm i --save @koa/multer multer
+```
+
+```javascript
+const multer = require('@koa/multer') // 引入
+const upload = multer() // 加载multer
+```
+
+multer（options）
+
+```javascript
+const upload = multer({dest: './static/xxx'})
+```
+
+```javascript
+const storage = multer.diskStorage({ // multer调用diskStorage可控制磁盘存储引擎
+  destination: function (req, file, cb) {
+    cb(null, './static/images')
+  },
+  filename: function (req, file, cb) {
+    let fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+    cb(null, Date.now() + "." + fileFormat[fileFormat.length - 1]);
+  }
+})
+const limits = {
+  fields: 10,//非文件字段的数量
+  fileSize: 500 * 1024,//文件大小 单位 b
+  files: 1//文件数量
+}
+const upload = multer({storage, limits})
+```
+
+ctx.file
+
+```text
+每个传到后台的文件都有如下信息：
+fieldname	Field name 由表单指定	 
+originalname	用户计算机上的文件的名称	 
+encoding	文件编码	 
+mimetype	文件的 MIME 类型  content-type	 
+size	文件大小（字节单位）	 
+destination	保存路径	 
+filename	保存在 destination 中的文件名	 
+path	已上传文件的完整路径	 
+buffer	一个存放了整个文件的 Buffer
+```
+
+```text
+limits 常用key如下：
+Key	Description	Default
+fieldNameSize	field 名字最大长度	100 bytes
+fieldSize	field 值的最大长度	1MB
+fields	非文件 field 的最大数量	无限
+fileSize	在 multipart 表单中，文件最大长度 (字节单位)	无限
+files	在 multipart 表单中，文件最大数量	无限
+```
+
+单文件上传
+
+```javascript
+const Koa = require('koa')
+const Router = require('koa-router')
+const bdparser = require('koa-bodyparser')
+const multer = require('@koa/multer') // 引入
+const app = new Koa()
+const router = new Router()
+app.use(router.routes())
+// 配置上传的文件目录及文件名
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './static/images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+const upload = multer({ // 源码中multer是一个函数，所以需要执行
+  storage: storage
+})
+// 单文件上传中间件挂在到路由上，了解koa源码会知道执行顺序是至左向右
+// upload.single('file') 参数file是前端上传的文件字段名 element上传组件中的name
+// 注意，这个字段名前后端必须一致
+router.post('/upload', upload.single('file'), ctx => {
+  ctx.body = 'success';
+})
+```
+
+多文件上传 1、upload.array('file'， maxCount)  多文件上传的中间件，参数二是上传文件最大数量，文件信息存放在上下文中的files中。
+
+```javascript
+
+// 配置上传的文件目录及文件名
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './static/images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+const upload = multer({ // 源码中multer是一个函数，所以需要执行
+  storage: storage
+})
+// upload.array(global.fileName, maxCount) 参数二为上传文件的最大数量
+router.post('/upload', upload.array('file', maxCount), ctx => {
+  // ctx.files 可获取到上传的所有文件信息，type -> Array
+  ctx.body = 'success';
+})
+```
+
+upload.fields([{name: 'xxx', maxCount: Number}，{}， ··· ···])
+多文件上传的中间件，参数是一个数组，里边可配置多个对象： name ->  是前端上传的文件字段名（可以配置不同的字段名）； maxCount -> 上传文件的最大数量。
+
+```javascript
+router.post('/upload', upload.fields([
+  {name: 'file', maxCount: 10},
+  {name: 'file1', maxCount: 10},
+]), ctx => {
+  console.log('fileNames', ctx.files)
+  ctx.body = 'done';
+})
+```
