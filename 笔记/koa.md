@@ -19,6 +19,13 @@ app.use(async ctx => {
 app.listen(3000)
 ```
 
+```javascript
+const cors = require('koa2-cors') // 跨域
+app.use(cors())
+
+router.prefix('/api/mall') // 前缀
+```
+
 ## 路由
 
 https://github.com/koajs/router/blob/HEAD/API.md
