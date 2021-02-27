@@ -12,6 +12,8 @@
   "dependencies": {
     "@koa/router": "^10.0.0",
     "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
     "koa2-cors": "^2.0.6",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.17"
