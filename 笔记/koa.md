@@ -409,7 +409,30 @@ npm i --save @koa/multer multer
 
 ```javascript
 const multer = require('@koa/multer') // 引入
-const upload = multer() // 加载multer
+
+let storage = multer.diskStorage({
+  //文件保存路径
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  //修改文件名称
+  filename: function (req, file, cb) {
+    let fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+    cb(null, Date.now() + "." + fileFormat[fileFormat.length - 1]);
+  }
+})
+
+let upload = multer({storage});
+
+router.post('/upload', upload.single('img'), async ctx => {
+  console.log('ctx.file', ctx.file);
+  ctx.body = 'done';
+});
+
+router.post('/multiupload', upload.array('mutilimg', 2), async ctx => {
+  console.log('ctx.files', ctx.files);
+  ctx.body = 'done';
+});
 ```
 
 multer（options）

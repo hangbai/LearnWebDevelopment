@@ -22,25 +22,75 @@ vue ui
 npm install -g @vue/cli-init
 ```
 
-### 2.安装使用Vuetify
-
-```bash
-vue add vuetify
-```
-
 ### 3.安装Vue Router
 
 ```sh
 vue add router
 ```
 
-## TabBar模板
+## UI
 
-App.vue设置
+### 2.安装使用Vuetify
 
-```
-<v-app>
-  <router-view/>
-</v-app>
+```bash
+vue add vuetify
 ```
 
+### antd
+2.0
+```shell
+npm i --save ant-design-vue@next
+npm install babel-plugin-import --save-dev //局部组件
+```
+完整引入
+```javascript
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css';
+const app = createApp(App);
+app.use(Antd);
+// ------------
+import { Button } from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+const app = createApp(App);
+app.use(Antd);
+```
+按需加载
+```javascript
+// .babelrc or babel-loader option
+{
+  "plugins": [
+    ["import", { "libraryName": "ant-design-vue", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 文件
+  ]
+}
+
+// babel-plugin-import 会帮助你加载 JS 和 CSS
+import { DatePicker } from "ant-design-vue";
+
+import DatePicker from "ant-design-vue/lib/date-picker"; // 加载 JS
+import "ant-design-vue/lib/date-picker/style/css"; // 加载 CSS
+// import 'ant-design-vue/lib/date-picker/style';         // 加载 LESS
+
+app.use(DatePicker);
+```
+引入less
+```shell
+npm install --save-dev less
+npm install -D less-loader@7.x
+```
+
+```javascript
+import 'ant-design-vue/dist/antd.less';
+
+// vue.config.js
+module.exports = {
+  css: {
+    loaderOptions: {
+      less: {
+        lessOptions: {
+          javascriptEnabled: true,
+        },
+      },
+    },
+  },
+}
+```
