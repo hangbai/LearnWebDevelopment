@@ -26,44 +26,39 @@ const session = require('koa-session');
 app.keys = ['some secret'];
 const CONFIG = {
   key: 'koa:sess',   //cookie key (default is koa:sess)
-  maxAge: 10000,  // cookie的过期时间 maxAge in ms (default is 1 days)
+  maxAge: 24*3600*1000,  // cookie的过期时间 maxAge in ms (default is 1 days)
 };
 app.use(session(CONFIG, app));
 
-// multer
-const multer = require('@koa/multer')
-let storage = multer.diskStorage({
-  //文件保存路径
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads/')
-  },
-  //修改文件名称
-  filename: function (req, file, cb) {
-    let fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
-    cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
+router.get('/',async (ctx)=> {
+  console.log(ctx.session.username)
+  if (ctx.session.username == 'muyou3040' && ctx.session.password == '123456'){
+    console.log('首页')
+    ctx.body = "首页"
+  }else {
+    console.log('请登录')
+    ctx.redirect('/login')
   }
 })
-let upload = multer({storage});
 
-
-router.get('/', function (ctx) {
-  console.log('首页')
-  ctx.body = "首页";
+router.get('/login', async (ctx) => {
+  ctx.render('index')
 })
 
-router.get('/add', async (ctx) => {
-  await ctx.render('index')
+router.post('/doLogin', async (ctx, next) => {
+  let username = ctx.request.body.username
+  let password = ctx.request.body.password
+  console.log(username, password)
+  if (username == 'muyou3040' && password == '123456') {
+    console.log('登录成功')
+    ctx.session.username = username
+    ctx.session.password = password
+    ctx.redirect('/')
+  } else {
+    console.log('登录失败')
+    ctx.redirect('/login')
+  }
 })
-
-router.post('/upload',upload.single('img'),async ctx => {
-  console.log('ctx.file', ctx.file);
-  ctx.body = 'done';
-});
-
-router.post('/multiupload',upload.array('mutilimg',2),async ctx => {
-  console.log('ctx.files', ctx.files);
-  ctx.body = 'done';
-});
 
 app.use(router.routes()) //作用：启动路由
 app.use(router.allowedMethods())
