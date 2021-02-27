@@ -74,7 +74,7 @@ app.use(DatePicker);
 ```
 引入less
 ```shell
-npm install --save-dev less
+npm install --save-dev less@^2.7.3
 npm install -D less-loader@7.x
 ```
 
@@ -94,3 +94,24 @@ module.exports = {
   },
 }
 ```
+
+### Vant
+```shell
+npm i vant@next -S
+```
+```javascript
+import Vant from 'vant';
+import 'vant/lib/index.css';
+app.use(Vant);
+```
+
+## 搭建
+
+### 登录页面
+
+在 setup 中访问路由和当前路由
+https://next.router.vuejs.org/zh/guide/advanced/composition-api.html
+
+
+
+

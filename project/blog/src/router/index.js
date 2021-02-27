@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: '/signin',
-    name: 'Signin',
+    name: 'SignIn',
     component: () => import('@/views/User/SignIn')
   },
   {
