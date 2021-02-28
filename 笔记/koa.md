@@ -6,6 +6,13 @@ https://www.itying.com/koa/
 npm install koa --save
 ```
 
+cli
+
+```shell
+npm install -g koa-generator
+koa2 -e project
+```
+
 ## 创建
 
 ```javascript

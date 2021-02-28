@@ -112,6 +112,37 @@ app.use(Vant);
 在 setup 中访问路由和当前路由
 https://next.router.vuejs.org/zh/guide/advanced/composition-api.html
 
+### koa
+```shell
+npm install -g koa-generator
+koa2 -e blog
+```
 
-
+```javascript
+// API/blog/model/config.js
+module.exports ={
+    dbs: 'mongodb://127.0.0.1:27017/blog'
+}
+// API/blog/model/user.js
+const mongoose = require('mongoose')
+const userSchema = new mongoose.Schema({
+    user: {type: String},
+    password: {type: String},
+  }, {versionKey: false} // 去除"__v":0
+)
+module.exports = mongoose.model('User',userSchema,'user')
+// API/blog/routes/users.js
+const router = require('koa-router')()
+const userModel = require('../model/user')
+router.prefix('/users')
+router.post('/', async (ctx, next) => {
+  let user = await userModel.findOne(ctx.request.body,{_id: 0})
+  if (user) {
+    ctx.body = {'success': true}
+  } else {
+    ctx.body = {'success': false}
+  }
+})
+module.exports = router
+```
 
